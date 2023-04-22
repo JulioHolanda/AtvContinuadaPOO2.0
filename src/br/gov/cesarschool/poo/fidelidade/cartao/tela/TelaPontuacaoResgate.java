@@ -1,6 +1,7 @@
 package br.gov.cesarschool.poo.fidelidade.cartao.tela;
 
 import org.eclipse.swt.widgets.Display;
+
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.SWT;
@@ -18,6 +19,9 @@ import org.eclipse.swt.events.MouseEvent;
 
 import br.gov.cesarschool.poo.fidelidade.cartao.dao.CartaoFidelidadeDAO;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.CartaoFidelidade;
+import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
+import br.gov.cesarschool.poo.fidelidade.cartao.entidade.TipoResgate;
+
 import org.eclipse.swt.widgets.Combo;
 
 public class TelaPontuacaoResgate {
@@ -32,6 +36,9 @@ public class TelaPontuacaoResgate {
 	private Combo cbTipoResgate;
 	private Button btnPontuarResgatar;
 	private Button btnVoltar;
+	
+	CartaoFidelidadeDAO cartaoFidelidadeDAO = new CartaoFidelidadeDAO();
+	
 
 	/**
 	 * Launch the application.
@@ -66,7 +73,7 @@ public class TelaPontuacaoResgate {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setEnabled(false);
+		//shell.setEnabled(false);
 		shell.setSize(450, 397);
 		shell.setText("SWT Application");
 		
@@ -83,13 +90,26 @@ public class TelaPontuacaoResgate {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String numeroCartao = txNumeroCartao.getText();
-				CartaoFidelidadeDAO cartaoFidelidadeDAO = new CartaoFidelidadeDAO();
+				if(numeroCartao.length() != 17) {
+					JOptionPane.showMessageDialog(null, 
+							"Número de Cartão Inválido");
+					return;
+				}
+				try {
+					Long.parseLong(numeroCartao);
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, 
+							"Número de Cartão Inválido");
+					return;
+				}
+
 				CartaoFidelidade cartaoFidelidade = cartaoFidelidadeDAO.buscar(Long.parseLong(numeroCartao));
 				if(numeroCartao == null || cartaoFidelidade == null) {
 					JOptionPane.showMessageDialog(null, 
 							"Cartão Inválido");
 					return;
 				}
+				
 				txNumeroCartao.setEnabled(false);
 				btnRadioButton.setEnabled(false);
 				btnRadioButton_1.setEnabled(false);
@@ -101,12 +121,7 @@ public class TelaPontuacaoResgate {
 					txSaldoAtual.setText(String.valueOf(cartaoFidelidade.getSaldo()));
 					btnPontuarResgatar.setText("Resgatar");
 				}
-				
-				
-				
-				
-				
-				
+				cbTipoResgate.setItems(new String[] {"produto", "serviço", "viagem"});
 			}
 		});
 		btnBuscar.setBounds(285, 20, 75, 25);
@@ -133,6 +148,7 @@ public class TelaPontuacaoResgate {
 		lblOperao.setText("Operação");
 		
 		txSaldoAtual = new Text(shell, SWT.BORDER);
+		txSaldoAtual.setEnabled(false);
 		txSaldoAtual.setEditable(false);
 		txSaldoAtual.setBounds(136, 126, 139, 21);
 		
@@ -141,6 +157,7 @@ public class TelaPontuacaoResgate {
 		lblSaldoAtual.setText("Saldo Atual");
 		
 		Combo cbTipoResgate = new Combo(shell, SWT.NONE);
+		cbTipoResgate.setEnabled(false);
 		this.cbTipoResgate = cbTipoResgate;
 		cbTipoResgate.setBounds(136, 164, 203, 23);
 		
@@ -150,7 +167,6 @@ public class TelaPontuacaoResgate {
 		
 		txValor = new Text(shell, SWT.BORDER);
 		txValor.setEnabled(false);
-		txValor.setEditable(false);
 		txValor.setText("");
 		txValor.setBounds(136, 211, 139, 21);
 		
@@ -160,6 +176,95 @@ public class TelaPontuacaoResgate {
 		
 		Button btnPontuarResgatar = new Button(shell, SWT.NONE);
 		this.btnPontuarResgatar = btnPontuarResgatar;
+		btnPontuarResgatar.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String valor = txValor.getText();
+				String numeroCartao = txNumeroCartao.getText();
+				int tipoResgateInt = cbTipoResgate.getSelectionIndex();
+				TipoResgate tipoResgate;
+				if (tipoResgateInt == -1) {
+					JOptionPane.showMessageDialog(null, 
+							"Selecione uma operação");
+					return;
+				}else if (tipoResgateInt == 0) {
+					tipoResgate = TipoResgate.PRODUTO;
+				}else if (tipoResgateInt == 1) {
+					tipoResgate = TipoResgate.SERVICO;
+				}else{
+					tipoResgate = TipoResgate.VIAGEM;
+				}
+
+				double valorDouble;
+				if ( valor == "" || valor == null) {
+					JOptionPane.showMessageDialog(null, 
+							"Valor inválido");
+					return;	
+				}
+				try {
+					valorDouble = Double.parseDouble(valor);
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, 
+							"Valor inválido");
+					return;
+				}
+				if(btnRadioButton.getSelection()) {
+					if(CartaoFidelidadeMediator.pontuar(Long.parseLong(numeroCartao), valorDouble) == null) {
+						JOptionPane.showMessageDialog(null, 
+								"Pontuado com Sucesso");
+						
+						txSaldoAtual.setText("");
+						txValor.setText("");
+						txNumeroCartao.setText("");
+						cbTipoResgate.setText(null);
+						btnRadioButton.setSelection(false);
+						btnRadioButton_1.setSelection(false);
+						
+						txNumeroCartao.setEnabled(true);
+						btnRadioButton.setEnabled(true);
+						btnRadioButton_1.setEnabled(true);
+						btnBuscar.setEnabled(true);
+						
+						cbTipoResgate.setEnabled(false);
+						btnPontuarResgatar.setEnabled(false);
+						btnVoltar.setEnabled(false);
+						
+						return;
+					}else {
+						JOptionPane.showMessageDialog(null, 
+								CartaoFidelidadeMediator.pontuar(Long.parseLong(numeroCartao), valorDouble));
+						return;
+					}
+				}else if(btnRadioButton_1.getSelection()) {
+					if(CartaoFidelidadeMediator.resgatar(Long.parseLong(numeroCartao), valorDouble, tipoResgate) ==null) {
+						JOptionPane.showMessageDialog(null, 
+								"Resgate realizado com sucesso");
+						
+						txSaldoAtual.setText("");
+						txValor.setText("");
+						txNumeroCartao.setText("");
+						cbTipoResgate.setText(null);
+						btnRadioButton.setSelection(false);
+						btnRadioButton_1.setSelection(false);
+						
+						txNumeroCartao.setEnabled(true);
+						btnRadioButton.setEnabled(true);
+						btnRadioButton_1.setEnabled(true);
+						btnBuscar.setEnabled(true);
+						
+						cbTipoResgate.setEnabled(false);
+						btnPontuarResgatar.setEnabled(false);
+						btnVoltar.setEnabled(false);
+						
+						return;
+					}else {
+						JOptionPane.showMessageDialog(null, 
+								CartaoFidelidadeMediator.resgatar(Long.parseLong(numeroCartao), valorDouble, tipoResgate));
+						return;
+					}									
+				}
+			}
+		});
 		btnPontuarResgatar.setBounds(61, 281, 139, 25);
 		btnPontuarResgatar.setText("Pontuar/Resgatar");
 		
