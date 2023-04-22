@@ -30,7 +30,8 @@ public class CartaoFidelidadeMediator {
     public long gerarCartao(Cliente cliente){
         long numeroCartaoFidelidade;
         LocalDateTime data = LocalDateTime.now(); 
-        numeroCartaoFidelidade = Long.parseLong(cliente.getCpf()) + data.getYear() + data.getMonthValue() + data.getDayOfMonth();
+        String cpf = cliente.getCpf();
+        numeroCartaoFidelidade = Long.parseLong(cpf.substring(0, 9)) + data.getYear() + data.getMonthValue() + data.getDayOfMonth();
         CartaoFidelidade cartaoFidelidade= new CartaoFidelidade(numeroCartaoFidelidade);
         repositorioCartao.incluir(cartaoFidelidade);
         if(repositorioCartao.buscar(numeroCartaoFidelidade) != null){
