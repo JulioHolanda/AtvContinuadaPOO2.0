@@ -31,7 +31,7 @@ public class CartaoFidelidadeMediator {
         long numeroCartaoFidelidade;
         LocalDateTime data = LocalDateTime.now(); 
         String cpf = cliente.getCpf();
-        numeroCartaoFidelidade = Long.parseLong(cpf.substring(0, 9)) + data.getYear() + data.getMonthValue() + data.getDayOfMonth();
+        numeroCartaoFidelidade = Long.parseLong(cpf.substring(0, 9) + String.valueOf(data.getYear()) + String.valueOf(data.getMonthValue()) + String.valueOf(data.getDayOfMonth()));
         CartaoFidelidade cartaoFidelidade= new CartaoFidelidade(numeroCartaoFidelidade);
         repositorioCartao.incluir(cartaoFidelidade);
         if(repositorioCartao.buscar(numeroCartaoFidelidade) != null){
