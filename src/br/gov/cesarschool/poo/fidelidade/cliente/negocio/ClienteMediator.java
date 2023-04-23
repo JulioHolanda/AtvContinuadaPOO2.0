@@ -11,8 +11,8 @@ import br.gov.cesarschool.poo.fidelidade.geral.entidade.Endereco;
 public class ClienteMediator {
 
     private static ClienteMediator instance;
-    private ClienteDAO repositorioCliente;
-    private CartaoFidelidadeMediator cartaoMediator;
+    private static ClienteDAO repositorioCliente;
+    private static CartaoFidelidadeMediator cartaoMediator;
 
     private ClienteMediator() {
         repositorioCliente = new ClienteDAO();
@@ -26,7 +26,7 @@ public class ClienteMediator {
         return instance;
     }
 
-    public ResultadoInclusaoCliente incluir(Cliente cliente) {
+	public static ResultadoInclusaoCliente incluir(Cliente cliente) {
         String validacao = validar(cliente);
         if (validacao == null) {
             repositorioCliente.incluir(cliente);
@@ -37,7 +37,7 @@ public class ClienteMediator {
         }
     }
 
-    public String alterar(Cliente cliente) {
+    public static String alterar(Cliente cliente) {
         String validacao = validar(cliente);
         if (validacao == null) {
             repositorioCliente.alterar(cliente);
@@ -48,7 +48,7 @@ public class ClienteMediator {
     }
 
     	
-	private String validar(Cliente cliente) {
+	private static String validar(Cliente cliente) {
 	    if (ValidadorCPF.ehCpfValido(cliente.getCpf()) == false) {
 	        return "CPF Invalido";
 	    }

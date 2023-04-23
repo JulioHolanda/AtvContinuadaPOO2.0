@@ -29,7 +29,7 @@ public class ClienteDAO {
 		return true;
 	}
 
-	public boolean alterar(Cliente cliente) {
+	public static boolean alterar(Cliente cliente) {
 		String arq = getArquivo(cliente.getCpf());
 		if (!new File(arq).exists()) {
 			return false; 
@@ -41,7 +41,7 @@ public class ClienteDAO {
 		return true;
 	}
 
-	public Cliente buscar(String cpf) {
+	public static Cliente buscar(String cpf) {
 		try {
 			String arquivo = getArquivo(cpf);
 			File file = new File(arquivo);
@@ -56,7 +56,7 @@ public class ClienteDAO {
 		}
 	}
 
-	private Cliente buscarAux(File file) {
+	private static Cliente buscarAux(File file) {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
 			Cliente cliente = (Cliente) ois.readObject();
 			return cliente;
@@ -66,15 +66,26 @@ public class ClienteDAO {
 		}
 	}
 
-	private void incluirAux(Cliente cliente, String arq) {
-		try (FileOutputStream fos = new FileOutputStream(arq); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+	private static void incluirAux(Cliente cliente, String arq) {
+		FileOutputStream fos = null;
+		ObjectOutputStream oos = null;
+		try {
+			fos = new FileOutputStream(arq);
+			oos = new ObjectOutputStream(fos);
 			oos.writeObject(cliente);
 		} catch (Exception e) {
-			throw new RuntimeException("Erro ao incluir conta: " + e.getMessage());
-		}
+			throw new RuntimeException("Erro ao incluir cliente.");
+		} finally {
+			try {
+				oos.close();
+			} catch (Exception e) {}
+			try {
+				fos.close();
+			} catch (Exception e) {}			
+		} 
 	}
 
-	private String getArquivo(String cpf) {
+	private static String getArquivo(String cpf) {
 		return DIR_BASE + cpf + EXT;
 	}
 }
