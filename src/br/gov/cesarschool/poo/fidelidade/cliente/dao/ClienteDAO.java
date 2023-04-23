@@ -29,7 +29,7 @@ public class ClienteDAO {
 		return true;
 	}
 
-	public static boolean alterar(Cliente cliente) {
+	public boolean alterar(Cliente cliente) {
 		String arq = getArquivo(cliente.getCpf());
 		if (!new File(arq).exists()) {
 			return false; 
@@ -41,7 +41,7 @@ public class ClienteDAO {
 		return true;
 	}
 
-	public static Cliente buscar(String cpf) {
+	public Cliente buscar(String cpf) {
 		try {
 			String arquivo = getArquivo(cpf);
 			File file = new File(arquivo);
@@ -56,7 +56,7 @@ public class ClienteDAO {
 		}
 	}
 
-	private static Cliente buscarAux(File file) {
+	private Cliente buscarAux(File file) {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
 			Cliente cliente = (Cliente) ois.readObject();
 			return cliente;
@@ -66,7 +66,7 @@ public class ClienteDAO {
 		}
 	}
 
-	private static void incluirAux(Cliente cliente, String arq) {
+	private void incluirAux(Cliente cliente, String arq) {
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		try {
@@ -85,7 +85,7 @@ public class ClienteDAO {
 		} 
 	}
 
-	private static String getArquivo(String cpf) {
+	private String getArquivo(String cpf) {
 		return DIR_BASE + cpf + EXT;
 	}
 }

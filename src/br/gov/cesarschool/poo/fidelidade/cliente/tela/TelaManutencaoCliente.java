@@ -11,6 +11,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import br.gov.cesarschool.poo.fidelidade.cliente.dao.ClienteDAO;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 import br.gov.cesarschool.poo.fidelidade.cliente.negocio.ClienteMediator;
+import br.gov.cesarschool.poo.fidelidade.cliente.negocio.ResultadoInclusaoCliente;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Endereco;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Sexo;
 
@@ -224,7 +225,8 @@ public class TelaManutencaoCliente {
 
 			public void widgetSelected(SelectionEvent e) {
 				String CPF = txtCPF.getText();
-				if(ClienteDAO.buscar(CPF) == null) {
+				ClienteDAO clienteDAO = new ClienteDAO();
+				if(clienteDAO.buscar(CPF) == null) {
 					isNew = true;
 					lblCPF.setVisible(true);
 					txtCPF.setVisible(true);
@@ -261,9 +263,10 @@ public class TelaManutencaoCliente {
 		btnBuscar.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				String CPF = txtCPF.getText();
-				if(ClienteDAO.buscar(CPF) != null) {
+				ClienteDAO clienteDAO = new ClienteDAO();
+				if(clienteDAO.buscar(CPF) != null) {
 					isNew = false;
-					Cliente cliente = ClienteDAO.buscar(CPF);
+					Cliente cliente = clienteDAO.buscar(CPF);
 					lblCPF.setVisible(true);
 					txtCPF.setVisible(true);
 					btnNovo.setVisible(true);
@@ -372,8 +375,7 @@ public class TelaManutencaoCliente {
 		
 		btnIncluir.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				String
-				CPF = txtCPF.getText();
+				String CPF = txtCPF.getText();
 				if(CPF.length()!= 11) {
 				  JOptionPane.showMessageDialog(null, "Formato inválido");
 				  return;
@@ -475,32 +477,35 @@ public class TelaManutencaoCliente {
 				
 				Endereco endereco = new Endereco(txtLogradouro.getText(), Integer.valueOf(txtNumero.getText()), txtComplemento.getText(), txtCep.getText(), txtCidade.getText(), cbEstado.getText(), "Brasil");
 				
-				Date data = new Date(txtDataDeNascimento.getText());	
-				ClienteMediator.getInstance();
+				Date data = new Date(txtDataDeNascimento.getText());
+				ClienteMediator clienteMediator = ClienteMediator.getInstance();
 				if(isNew) {
 					if(btnRadioButtonMasculino.getSelection()) {
 						Cliente clienteM = new Cliente(txtCPF.getText(), txtNomeCompleto.getText(), Sexo.MASCULINO, data, Double.parseDouble(txtRenda.getText()), endereco);
-						if(ClienteMediator.incluir(clienteM).getMensagemErroValidacao() == null) {
+						ResultadoInclusaoCliente resultadoInclusaoCliente = clienteMediator.incluir(clienteM);
+						if(resultadoInclusaoCliente.getMensagemErroValidacao() == null) {
 					        JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
 					        return;
 						}else {
 							JOptionPane.showMessageDialog(null, 
-									ClienteMediator.incluir(clienteM).getMensagemErroValidacao());
+									resultadoInclusaoCliente.getMensagemErroValidacao());
 							return;
 						}
 					}else {
 						Cliente clienteF = new Cliente(txtCPF.getText(), txtNomeCompleto.getText(), Sexo.FEMININO, data, Double.parseDouble(txtRenda.getText()), endereco);
-						if(ClienteMediator.incluir(clienteF).getMensagemErroValidacao() == null) {
+						ResultadoInclusaoCliente resultadoInclusaoCliente = clienteMediator.incluir(clienteF);
+						if(resultadoInclusaoCliente.getMensagemErroValidacao() == null) {
 					        JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
 					        return;
 						}else {
 							JOptionPane.showMessageDialog(null, 
-									ClienteMediator.incluir(clienteF).getMensagemErroValidacao());
+									resultadoInclusaoCliente.getMensagemErroValidacao());
 							return;
 						}
 					}
 				}else {
-					Cliente clienteAlterar = ClienteDAO.buscar(txtCPF.getText());
+					ClienteDAO clienteDAO = new ClienteDAO();
+					Cliente clienteAlterar = clienteDAO.buscar(txtCPF.getText());
 					clienteAlterar.setDataNascimento(data);
 					clienteAlterar.setEndereco(endereco);
 					clienteAlterar.setNomeCompleto(txtNomeCompleto.getText());
@@ -512,12 +517,12 @@ public class TelaManutencaoCliente {
 						clienteAlterar.setSexo(Sexo.FEMININO);
 					}
 					
-					if(ClienteMediator.alterar(clienteAlterar) == null) {
+					if(clienteMediator.alterar(clienteAlterar) == null) {
 				        JOptionPane.showMessageDialog(null, "Dados alterados com sucesso!");
 				        return;
 					}else {
 						JOptionPane.showMessageDialog(null, 
-								ClienteMediator.alterar(clienteAlterar));
+								clienteMediator.alterar(clienteAlterar));
 						return;
 					}
 					
