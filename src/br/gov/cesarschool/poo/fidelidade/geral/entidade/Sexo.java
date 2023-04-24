@@ -1,6 +1,8 @@
 package br.gov.cesarschool.poo.fidelidade.geral.entidade;
 
-public enum Sexo {
+import java.io.Serializable;
+
+public enum Sexo implements Serializable {
     FEMININO(1, "Feminino"),
     MASCULINO(2, "Masculino");
 

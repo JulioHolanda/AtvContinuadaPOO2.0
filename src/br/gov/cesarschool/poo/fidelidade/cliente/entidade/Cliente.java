@@ -1,10 +1,11 @@
 package br.gov.cesarschool.poo.fidelidade.cliente.entidade;
+import java.io.Serializable;
 import java.util.Date;
 
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Endereco;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Sexo;
 
-public class Cliente {
+public class Cliente implements Serializable {
     private String cpf;
     private String nomeCompleto;
     private Sexo sexo;

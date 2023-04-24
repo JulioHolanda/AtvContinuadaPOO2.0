@@ -31,6 +31,11 @@ public class ClienteDAO {
 		try {
 			fos = new FileOutputStream(arq);
 			oos = new ObjectOutputStream(fos);
+
+		} catch (Exception e) {
+			throw new RuntimeException("Erro em foo ou oos");
+		}
+		try {
 			oos.writeObject(cliente);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao incluir cliente");
@@ -41,7 +46,7 @@ public class ClienteDAO {
 			try {
 				fos.close();
 			} catch (Exception e) {}			
-		} 
+		}
 	}
 	
 	public boolean incluir(Cliente cliente) {

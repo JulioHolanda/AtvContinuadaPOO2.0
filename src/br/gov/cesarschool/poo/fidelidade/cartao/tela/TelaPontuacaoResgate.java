@@ -38,6 +38,7 @@ public class TelaPontuacaoResgate {
 	private Button btnVoltar;
 	
 	CartaoFidelidadeDAO cartaoFidelidadeDAO = new CartaoFidelidadeDAO();
+	CartaoFidelidadeMediator cartaoFidelidadeMedator = CartaoFidelidadeMediator.getInstance();
 	
 
 	/**
@@ -120,7 +121,16 @@ public class TelaPontuacaoResgate {
 					btnVoltar.setEnabled(true);	
 					txSaldoAtual.setText(String.valueOf(cartaoFidelidade.getSaldo()));
 					btnPontuarResgatar.setText("Resgatar");
+					txValor.setEnabled(true);
+				}else if(btnRadioButton.getSelection()) {
+					btnPontuarResgatar.setEnabled(true);
+					btnVoltar.setEnabled(true);	
+					txSaldoAtual.setText(String.valueOf(cartaoFidelidade.getSaldo()));
+					btnPontuarResgatar.setText("Pontuar");
+					txValor.setEnabled(true);
+					
 				}
+				
 				cbTipoResgate.setItems(new String[] {"produto", "serviço", "viagem"});
 			}
 		});
@@ -183,17 +193,7 @@ public class TelaPontuacaoResgate {
 				String numeroCartao = txNumeroCartao.getText();
 				int tipoResgateInt = cbTipoResgate.getSelectionIndex();
 				TipoResgate tipoResgate;
-				if (tipoResgateInt == -1) {
-					JOptionPane.showMessageDialog(null, 
-							"Selecione uma operação");
-					return;
-				}else if (tipoResgateInt == 0) {
-					tipoResgate = TipoResgate.PRODUTO;
-				}else if (tipoResgateInt == 1) {
-					tipoResgate = TipoResgate.SERVICO;
-				}else{
-					tipoResgate = TipoResgate.VIAGEM;
-				}
+				
 
 				double valorDouble;
 				if ( valor == "" || valor == null) {
@@ -236,6 +236,17 @@ public class TelaPontuacaoResgate {
 						return;
 					}
 				}else if(btnRadioButton_1.getSelection()) {
+					if (tipoResgateInt == -1) {
+						JOptionPane.showMessageDialog(null, 
+								"Selecione uma operação");
+						return;
+					}else if (tipoResgateInt == 0) {
+						tipoResgate = TipoResgate.PRODUTO;
+					}else if (tipoResgateInt == 1) {
+						tipoResgate = TipoResgate.SERVICO;
+					}else{
+						tipoResgate = TipoResgate.VIAGEM;
+					}
 					if(CartaoFidelidadeMediator.resgatar(Long.parseLong(numeroCartao), valorDouble, tipoResgate) ==null) {
 						JOptionPane.showMessageDialog(null, 
 								"Resgate realizado com sucesso");
@@ -276,7 +287,7 @@ public class TelaPontuacaoResgate {
 				txSaldoAtual.setText("");
 				txValor.setText("");
 				txNumeroCartao.setText("");
-				cbTipoResgate.setText(null);
+				cbTipoResgate.setText("");
 				btnRadioButton.setSelection(false);
 				btnRadioButton_1.setSelection(false);
 				

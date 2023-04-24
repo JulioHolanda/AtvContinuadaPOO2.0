@@ -10,6 +10,7 @@ import br.gov.cesarschool.poo.fidelidade.cartao.entidade.CartaoFidelidade;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoPontuacao;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoResgate;
+import java.io.Serializable;
 
 public class LancamentoExtratoDAO {
 
@@ -38,8 +39,10 @@ public class LancamentoExtratoDAO {
 			fos = new FileOutputStream(arq);
 			oos = new ObjectOutputStream(fos);
 			oos.writeObject(lancamento);
+
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao incluir Cartão");
+		
 		} finally {
 			try {
 				oos.close();

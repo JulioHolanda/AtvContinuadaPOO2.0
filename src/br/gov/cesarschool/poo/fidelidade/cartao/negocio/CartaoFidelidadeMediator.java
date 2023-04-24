@@ -31,7 +31,14 @@ public class CartaoFidelidadeMediator {
         long numeroCartaoFidelidade;
         LocalDateTime data = LocalDateTime.now(); 
         String cpf = cliente.getCpf();
-        numeroCartaoFidelidade = Long.parseLong(cpf.substring(0, 9) + String.valueOf(data.getYear()) + String.valueOf(data.getMonthValue()) + String.valueOf(data.getDayOfMonth()));
+        String numeroCartaoFidelidadeString;
+        if(data.getMonthValue() < 10) {
+        	numeroCartaoFidelidadeString = cpf.substring(0, 9) + String.valueOf(data.getYear()) + "0" + String.valueOf(data.getMonthValue()) + String.valueOf(data.getDayOfMonth());
+        }else {
+        	numeroCartaoFidelidadeString = cpf.substring(0, 9) + String.valueOf(data.getYear()) + String.valueOf(data.getMonthValue()) + String.valueOf(data.getDayOfMonth());
+        }
+        
+        numeroCartaoFidelidade = Long.parseLong( numeroCartaoFidelidadeString);
         CartaoFidelidade cartaoFidelidade= new CartaoFidelidade(numeroCartaoFidelidade);
         repositorioCartao.incluir(cartaoFidelidade);
         if(repositorioCartao.buscar(numeroCartaoFidelidade) != null){
@@ -47,10 +54,10 @@ public class CartaoFidelidadeMediator {
         if(quantidadePontos <= 0){
             return "A quantidade de pontos inserida é invalida";
         }
-        CartaoFidelidade cartaoFidelidade = repositorioCartao.buscar(numeroCartao);
-        if(cartaoFidelidade == null){
+        if(repositorioCartao.buscar(numeroCartao) == null){
             return "O número do cartão não foi encontrando no repositório";
         }
+        CartaoFidelidade cartaoFidelidade = repositorioCartao.buscar(numeroCartao);
         cartaoFidelidade.creditar(quantidadePontos);
         repositorioCartao.alterar(cartaoFidelidade);
         LancamentoExtratoPontuacao lancamentoExtrato = new LancamentoExtratoPontuacao(numeroCartao, (int) quantidadePontos, data);
@@ -71,7 +78,7 @@ public class CartaoFidelidadeMediator {
         }
 
         if(cartaoFidelidade.getSaldo() < quantidadePontos){
-            return "Valor de resgate menor que seu saldo";
+            return "Valor de resgate maior que seu saldo";
         }
 
         cartaoFidelidade.debitar(quantidadePontos);
