@@ -18,7 +18,7 @@ public class LancamentoExtratoResgate extends LancamentoExtrato{
 	@Override
 	public String obterChave() {
 		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-		String chaveLancamento = "R" + this.getNumeroCartao() + timestamp; 
+		String chaveLancamento = "R" + this.getNumeroCartao() + "_" + timestamp; 
 		return chaveLancamento;
 	}
 }

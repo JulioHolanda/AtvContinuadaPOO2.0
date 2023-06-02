@@ -12,7 +12,7 @@ public class LancamentoExtratoPontuacao extends LancamentoExtrato {
 	@Override
 	public String obterChave() {
 		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-		String chaveLancamento = "P" + this.getNumeroCartao() + timestamp; 
+		String chaveLancamento = "P" + this.getNumeroCartao()+ "_" + timestamp; 
 		return chaveLancamento;
 	}
 	
