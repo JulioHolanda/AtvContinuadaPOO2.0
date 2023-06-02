@@ -2,7 +2,7 @@ package br.gov.cesarschool.poo.fidelidade.cartao.entidade;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Identificavel;
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 
 public abstract class LancamentoExtrato extends Identificavel{
 	private long numeroCartao;

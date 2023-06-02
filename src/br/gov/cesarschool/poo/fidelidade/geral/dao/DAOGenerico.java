@@ -1,4 +1,4 @@
-package br.gov.cesarschool.poo.fidelidade.cliente.dao;
+package br.gov.cesarschool.poo.fidelidade.geral.dao;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
-import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Identificavel;
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 
 public class DAOGenerico {
 	private static final String EXT = ".dat";

@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoPontuacao;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoResgate;
-import br.gov.cesarschool.poo.fidelidade.cliente.dao.DAOGenerico;
+import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 
 public class LancamentoExtratoDAO {
 	

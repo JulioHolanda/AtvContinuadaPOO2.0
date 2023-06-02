@@ -1,7 +1,8 @@
 package br.gov.cesarschool.poo.fidelidade.cartao.entidade;
 import java.io.Serializable;
-import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Identificavel;
 import java.util.*;
+
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 
 public class CartaoFidelidade extends Identificavel {
 	

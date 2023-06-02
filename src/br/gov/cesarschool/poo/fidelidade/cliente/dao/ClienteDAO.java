@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
+import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 
 public class ClienteDAO {
 	private static final String FILE_SEP = System.getProperty("file.separator");

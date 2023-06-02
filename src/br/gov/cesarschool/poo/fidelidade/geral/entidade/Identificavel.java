@@ -1,4 +1,4 @@
-package br.gov.cesarschool.poo.fidelidade.cliente.entidade;
+package br.gov.cesarschool.poo.fidelidade.geral.entidade;
 
 import java.io.Serializable;
 
