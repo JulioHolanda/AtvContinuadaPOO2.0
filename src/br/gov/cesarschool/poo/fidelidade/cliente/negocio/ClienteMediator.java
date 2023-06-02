@@ -1,100 +1,102 @@
 package br.gov.cesarschool.poo.fidelidade.cliente.negocio;
 
-import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
 import br.gov.cesarschool.poo.fidelidade.cliente.dao.ClienteDAO;
-
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
-import br.gov.cesarschool.poo.fidelidade.util.ValidadorCPF;
-import br.gov.cesarschool.poo.fidelidade.util.StringUtil;
-import br.gov.cesarschool.poo.fidelidade.geral.entidade.Endereco;
+import br.gov.cesarschool.poo.fidelidade.util.*;
+import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
 
 public class ClienteMediator {
-
-    private static ClienteMediator instance;
-    private ClienteDAO repositorioCliente;
-    private CartaoFidelidadeMediator cartaoMediator;
-
-    private ClienteMediator() {
-        repositorioCliente = new ClienteDAO();
-        cartaoMediator = CartaoFidelidadeMediator.getInstance();
-    }
-
-    public static ClienteMediator getInstance() {
+	
+	private static ClienteMediator instance;
+	private ClienteDAO repositorioCliente;
+	private CartaoFidelidadeMediator cartaoMediator;
+	
+	private ClienteMediator() {
+		repositorioCliente = new ClienteDAO();
+		cartaoMediator = CartaoFidelidadeMediator.getInstance();
+	}
+	
+	public static ClienteMediator getInstance() {
         if (instance == null) {
-            instance = new ClienteMediator();
+            instance = new ClienteMediator(); 
         }
         return instance;
     }
-
 	public ResultadoInclusaoCliente incluir(Cliente cliente) {
-        String validacao = validar(cliente);
-        if (validacao == null) {
-            repositorioCliente.incluir(cliente);
-            long numeroCartaoFidelidade = cartaoMediator.gerarCartao(cliente);
-            return new ResultadoInclusaoCliente(numeroCartaoFidelidade, null);
-        } else {
-            return new ResultadoInclusaoCliente(0, validacao);
-        }
+		String msgErro = validar(cliente); 
+		long numeroCartao = 0;
+        if (msgErro == null){
+            boolean res = repositorioCliente.incluir(cliente);
+            if (res) {
+            	numeroCartao = cartaoMediator.gerarCartao(cliente);
+            } else {
+            	msgErro = "Erro ao incluir cliente no repositório";
+            }
+        } 
+        return new ResultadoInclusaoCliente(numeroCartao, msgErro);
     }
 
     public String alterar(Cliente cliente) {
-        String validacao = validar(cliente);
-        if (validacao == null) {
-            repositorioCliente.alterar(cliente);
-            return null;
-        } else {
-            return validar(cliente);
+    	String msgErro = validar(cliente); 
+        if (msgErro == null){
+            boolean res = repositorioCliente.alterar(cliente);
+            if (!res) {
+            	msgErro = "Erro ao alterar cliente no repositório";
+            }
         }
+        return msgErro;
     }
-
-    	
+	
 	private String validar(Cliente cliente) {
-	    if (ValidadorCPF.ehCpfValido(cliente.getCpf()) == false) {
-	        return "CPF Invalido";
+	    if(ValidadorCPF.ehCpfValido(cliente.getCpf()) == false){
+	        return "CPF Inválido";
 	    }
 
-	    if (StringUtil.ehNuloOuBranco(cliente.getNomeCompleto())) {
-	        return "Nome Invalido";
+	    else if (StringUtil.ehNuloOuBranco(cliente.getNomeCompleto())){
+	        return "Nome Inválido";
 	    }
 
-	    if (cliente.getSexo() == null) {
-	        return "Sexo Invalido";
+	    else if (cliente.getSexo() == null) {
+	        return "Sexo Inválido";
 	    }
 
-	    if (cliente.obterIdade() < 18) {
-	        return "Cliente com idade menor a 18 anos";
+	    else if (cliente.obterIdade() < 18) {
+	        return "A idade deve ser maior ou igual a 18.";
 	    }
 
-	    if (cliente.getRenda() < 0) {
-	        return "Renda Invalida";
+	    else if (cliente.getRenda() < 0) {
+	        return "Renda Inválida";
 	    }
 
-	    Endereco end = cliente.getEndereco();
-	    if (end == null) {
-	        return "EndereÃ§o Invalido";
+	    else if (cliente.getEndereco() == null) {
+	        return "Endereço Inválido";
 	    }
 
-	    if (StringUtil.ehNuloOuBranco(end.getLogradouro()) || end.getLogradouro().length() < 4) {
-	        return "EndereÃ§o Logradouro Invalido"; 
+	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getLogradouro()) || cliente.getEndereco().getLogradouro().length() < 4) {
+	        return "Logradouro Inválido"; 
 	    }
 
-	    if (end.getNumero() < 0) {
-	        return "EndereÃ§o Numero Invalido";
+	    else if (cliente.getEndereco().getNumero() < 0) {
+	        return "Numero de endereço inválido";
 	    }
 
-	    if (StringUtil.ehNuloOuBranco(end.getCidade())) {
-	        return "EndereÃ§o Cidade Invalido"; 
+	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getCidade())){
+	        return "Cidade Inválida"; 
 	    }
 	    
-	    if (StringUtil.ehNuloOuBranco(end.getEstado())) {
-	        return "EndereÃ§o Estado Invalido"; 
+	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getEstado())) {
+	        return "Estado Inválida"; 
 	    }
 
-	    if (StringUtil.ehNuloOuBranco(end.getPais())) {
-	        return "EndereÃ§o Pais Invalido"; 
+	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getPais())) {
+	        return "Pais Inválido"; 
 	    }
-
 	    return null;
-
     }
+
+	public Cliente buscarCliente(String cpf) {
+	    Cliente cliente = repositorioCliente.buscar(cpf);
+	    return cliente;
+	}
+	
 }

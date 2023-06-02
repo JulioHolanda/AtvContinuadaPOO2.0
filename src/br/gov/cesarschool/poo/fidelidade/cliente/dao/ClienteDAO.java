@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 
 public class ClienteDAO {
@@ -31,28 +30,25 @@ public class ClienteDAO {
 		try {
 			fos = new FileOutputStream(arq);
 			oos = new ObjectOutputStream(fos);
-
-		} catch (Exception e) {
-			throw new RuntimeException("Erro em foo ou oos");
-		}
-		try {
 			oos.writeObject(cliente);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao incluir cliente");
 		} finally {
 			try {
 				oos.close();
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 			try {
 				fos.close();
-			} catch (Exception e) {}			
+			} catch (Exception e) {
+			}
 		}
 	}
-	
+
 	public boolean incluir(Cliente cliente) {
 		File arq = getArquivo(cliente.getCpf());
 		if (arq.exists()) {
-			return false; 
+			return false;
 		}
 		incluirAux(cliente, arq);
 		return true;
@@ -61,7 +57,7 @@ public class ClienteDAO {
 	public boolean alterar(Cliente cliente) {
 		File arq = getArquivo(cliente.getCpf());
 		if (!arq.exists()) {
-			return false; 
+			return false;
 		}
 		if (!arq.delete()) {
 			return false;
@@ -73,24 +69,25 @@ public class ClienteDAO {
 	public Cliente buscar(String cpf) {
 		File arq = getArquivo(cpf);
 		if (!arq.exists()) {
-			return null; 
-		}				
+			return null;
+		}
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
 		try {
 			fis = new FileInputStream(arq);
 			ois = new ObjectInputStream(fis);
-			return (Cliente)ois.readObject(); 
+			return (Cliente) ois.readObject();
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao ler cliente");
 		} finally {
 			try {
-				ois.close(); 
-			} catch (Exception e) {}
+				ois.close();
+			} catch (Exception e) {
+			}
 			try {
-				fis.close(); 
-			} catch (Exception e) {}			
+				fis.close();
+			} catch (Exception e) {
+			}
 		}
 	}
-
 }
