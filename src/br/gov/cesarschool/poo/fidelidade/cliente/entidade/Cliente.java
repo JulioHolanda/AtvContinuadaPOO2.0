@@ -6,7 +6,7 @@ import java.util.Date;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class Cliente implements Serializable {
+public class Cliente extends Identificavel {
 	private String cpf;
 	private	String nomeCompleto;
 	private Sexo sexo;
@@ -75,5 +75,10 @@ public class Cliente implements Serializable {
 	            idade--;
 	        }
 	        return idade;
+	    }
+	    
+	    @Override
+	    public String obterChave() {
+	    	return cpf;
 	    }
 }

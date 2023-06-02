@@ -73,7 +73,7 @@ public class CartaoFidelidadeMediator {
 		if (qtdPontos <= 0 ) {
 			return QUANTIDADE_DE_PONTOS_MENOR_QUE_ZERO;
 		}		
-		CartaoFidelidade cardinhu = repositorioCartao.buscar(numeroCartao);		
+		CartaoFidelidade cardinhu = repositorioCartao.buscar((numeroCartao+""));		
 		if(cardinhu == null) {
 			return CARTAO_INEXISTENTE;
 		}		
@@ -86,7 +86,7 @@ public class CartaoFidelidadeMediator {
 		if (qtdPontos <= 0) {
 			return QUANTIDADE_DE_PONTOS_MENOR_QUE_ZERO;
 		}		
-	    CartaoFidelidade cardinhu = repositorioCartao.buscar(numeroCartao);
+	    CartaoFidelidade cardinhu = repositorioCartao.buscar((numeroCartao+""));
 	    if (cardinhu == null) {
 	        return CARTAO_INEXISTENTE;
 	    }
@@ -99,7 +99,7 @@ public class CartaoFidelidadeMediator {
 	}
 	
 	public CartaoFidelidade buscarCartao(long numeroCartao) {
-	    CartaoFidelidade cartao = repositorioCartao.buscar(numeroCartao);
+	    CartaoFidelidade cartao = repositorioCartao.buscar((numeroCartao+""));
 	    return cartao;
 	}
 }

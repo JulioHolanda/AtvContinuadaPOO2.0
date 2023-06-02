@@ -2,7 +2,9 @@ package br.gov.cesarschool.poo.fidelidade.cartao.entidade;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class LancamentoExtrato implements Serializable{
+import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Identificavel;
+
+public abstract class LancamentoExtrato extends Identificavel{
 	private long numeroCartao;
 	private double quantidadePontos;
 	private LocalDateTime dataHoraLancamento = LocalDateTime.now();

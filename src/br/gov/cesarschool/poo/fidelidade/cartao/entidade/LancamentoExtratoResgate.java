@@ -1,8 +1,9 @@
 package br.gov.cesarschool.poo.fidelidade.cartao.entidade;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
-public class LancamentoExtratoResgate extends LancamentoExtrato implements Serializable {
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class LancamentoExtratoResgate extends LancamentoExtrato{
 	private TipoResgate tipoResgate;
 
 	public LancamentoExtratoResgate(long numeroCartao, int quantidadePontos, LocalDateTime dataHoraLancamento, TipoResgate tipoResgate) {
@@ -12,5 +13,12 @@ public class LancamentoExtratoResgate extends LancamentoExtrato implements Seria
 
 	public TipoResgate getTipoResgate() {
 	    return tipoResgate;
+	}
+
+	@Override
+	public String obterChave() {
+		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+		String chaveLancamento = "R" + this.getNumeroCartao() + timestamp; 
+		return chaveLancamento;
 	}
 }
