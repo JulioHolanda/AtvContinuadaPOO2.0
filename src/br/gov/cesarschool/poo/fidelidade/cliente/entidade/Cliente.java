@@ -1,4 +1,5 @@
 package br.gov.cesarschool.poo.fidelidade.cliente.entidade;
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Comparavel;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Endereco;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Sexo;
@@ -7,7 +8,7 @@ import java.util.Date;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class Cliente extends Identificavel {
+public class Cliente extends Identificavel implements Comparavel {
 	private String cpf;
 	private	String nomeCompleto;
 	private Sexo sexo;
@@ -82,4 +83,17 @@ public class Cliente extends Identificavel {
 	    public String obterChave() {
 	    	return cpf;
 	    }
+
+		@Override
+		public int comparar(Comparavel comparavel) {
+			Cliente aComparar = (Cliente) comparavel;
+			int resultado = this.getNomeCompleto().compareTo(aComparar.getNomeCompleto());
+			
+			if (resultado < 0) {
+				return -1;				
+			}else if(resultado > 0){
+				return 1;	
+			}
+			return 0;
+		}
 }
