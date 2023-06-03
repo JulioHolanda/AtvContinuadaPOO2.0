@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 
@@ -19,12 +18,14 @@ public class DAOGenerico {
 		if (!diretorio.exists()) {
 			diretorio.mkdir();
 		}
+
 	}
 
 	private File getArquivo(String chave) {
 		String nomeArq = diretorioBase + chave + EXT;
 		return new File(nomeArq);
 	}
+	
 	private File getArquivo(Identificavel ident) {
 		 return getArquivo(ident.obterChave());
 	}
@@ -37,7 +38,7 @@ public class DAOGenerico {
 			oos = new ObjectOutputStream(fos);
 			oos.writeObject(ident);
 		} catch (Exception e) {
-			throw new RuntimeException("Erro ao incluir arquivo");
+			throw new RuntimeException("Erro ao incluir arquivo" + e.getMessage());
 		} finally {
 			try {
 				oos.close();
@@ -95,4 +96,88 @@ public class DAOGenerico {
 			}
 		}
 	}
+	
+	public Identificavel[] buscarTodos() {
+
+		
+		File diretorio = new File(diretorioBase);
+		
+		if (!diretorio.exists()) {
+			return null;
+		}
+		FileInputStream fis = null;
+		ObjectInputStream ois = null;
+		try {
+			
+			File[] files = diretorio.listFiles((dir, name) -> name.toLowerCase().endsWith(".dat"));
+			
+			if(files.length == 0) {
+				return new Identificavel[0];
+			}
+			
+			Identificavel[] ident = new Identificavel[files.length];
+			
+			int cont = 0;
+			
+			for(File file: files) {
+				fis = new FileInputStream(file);
+				ois = new ObjectInputStream(fis);
+				
+				ident[cont] = (Identificavel) ois.readObject();
+						
+				cont += 1;
+			}
+			System.out.println(ident);
+			
+			return ident;
+
+		} catch (Exception e) {
+			throw new RuntimeException("Erro ao ler chave" + e.getMessage());
+		} finally {
+			try {
+				ois.close();
+			} catch (Exception e) {
+			}
+			try {
+				fis.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+		String diretorioBase = "Walter-chan/";
+		
+		DAOGenerico dao = new DAOGenerico(diretorioBase);
+		
+		Cliente WalterPai = new Cliente("11147106444");
+		
+		WalterPai.setNomeCompleto("Walter Pai Andre");
+		
+		dao.incluir(WalterPai);
+		
+		Identificavel[] aidento = dao.buscarTodos();
+		
+		for(Identificavel aids:aidento) {			
+			Object objeto = (Object) aids;
+			
+			if(objeto instanceof Cliente) {
+				System.out.println(objeto);				
+			}
+		}
+		
+		//System.out.println("Local dos arquivos:" + dao.getArquivo(WalterPai).getAbsolutePath());
+		
+		File diretorio = dao.getArquivo(WalterPai);
+		
+		//System.out.println(diretorio.getAbsolutePath());
+		
+		File[] arquivos = diretorio.listFiles();
+		
+		
+	}
+	
+	
+	
 }

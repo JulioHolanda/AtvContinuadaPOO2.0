@@ -16,7 +16,13 @@ public class Cliente extends Identificavel implements Comparavel {
 	private double renda;
 	private Endereco endereco;
 	
-	 public Cliente(String cpf, String nomeCompleto, Sexo sexo, Date dataNascimento, double renda, Endereco endereco) {
+	
+	
+	 public Cliente(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public Cliente(String cpf, String nomeCompleto, Sexo sexo, Date dataNascimento, double renda, Endereco endereco) {
 	        this.cpf = cpf;
 	        this.nomeCompleto = nomeCompleto;
 	        this.sexo = sexo;

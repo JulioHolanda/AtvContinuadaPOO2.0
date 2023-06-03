@@ -30,7 +30,7 @@ public class ClienteMediator {
             if (res) {
             	numeroCartao = cartaoMediator.gerarCartao(cliente);
             } else {
-            	msgErro = "Erro ao incluir cliente no repositório";
+            	msgErro = "Erro ao incluir cliente no repositï¿½rio";
             }
         } 
         return new ResultadoInclusaoCliente(numeroCartao, msgErro);
@@ -41,7 +41,7 @@ public class ClienteMediator {
         if (msgErro == null){
             boolean res = repositorioCliente.alterar(cliente);
             if (!res) {
-            	msgErro = "Erro ao alterar cliente no repositório";
+            	msgErro = "Erro ao alterar cliente no repositï¿½rio";
             }
         }
         return msgErro;
@@ -49,15 +49,15 @@ public class ClienteMediator {
 	
 	private String validar(Cliente cliente) {
 	    if(ValidadorCPF.ehCpfValido(cliente.getCpf()) == false){
-	        return "CPF Inválido";
+	        return "CPF Invï¿½lido";
 	    }
 
 	    else if (StringUtil.ehNuloOuBranco(cliente.getNomeCompleto())){
-	        return "Nome Inválido";
+	        return "Nome Invï¿½lido";
 	    }
 
 	    else if (cliente.getSexo() == null) {
-	        return "Sexo Inválido";
+	        return "Sexo Invï¿½lido";
 	    }
 
 	    else if (cliente.obterIdade() < 18) {
@@ -65,31 +65,31 @@ public class ClienteMediator {
 	    }
 
 	    else if (cliente.getRenda() < 0) {
-	        return "Renda Inválida";
+	        return "Renda Invï¿½lida";
 	    }
 
 	    else if (cliente.getEndereco() == null) {
-	        return "Endereço Inválido";
+	        return "Endereï¿½o Invï¿½lido";
 	    }
 
 	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getLogradouro()) || cliente.getEndereco().getLogradouro().length() < 4) {
-	        return "Logradouro Inválido"; 
+	        return "Logradouro Invï¿½lido"; 
 	    }
 
 	    else if (cliente.getEndereco().getNumero() < 0) {
-	        return "Numero de endereço inválido";
+	        return "Numero de endereï¿½o invï¿½lido";
 	    }
 
 	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getCidade())){
-	        return "Cidade Inválida"; 
+	        return "Cidade Invï¿½lida"; 
 	    }
 	    
 	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getEstado())) {
-	        return "Estado Inválida"; 
+	        return "Estado Invï¿½lida"; 
 	    }
 
 	    else if (StringUtil.ehNuloOuBranco(cliente.getEndereco().getPais())) {
-	        return "Pais Inválido"; 
+	        return "Pais Invï¿½lido"; 
 	    }
 	    return null;
     }
@@ -97,6 +97,18 @@ public class ClienteMediator {
 	public Cliente buscarCliente(String cpf) {
 	    Cliente cliente = repositorioCliente.buscar(cpf);
 	    return cliente;
+	}
+	
+	public Cliente[] consultarClientesOrdenadosPorNome() {
+		
+		Cliente[] clientes = repositorioCliente.buscarTodos();
+		
+		Ordenador ordenator = new Ordenador();
+		
+		ordenator.ordenar(clientes);
+		
+		return clientes;
+		
 	}
 	
 }
