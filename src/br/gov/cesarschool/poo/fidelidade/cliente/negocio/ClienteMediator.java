@@ -2,7 +2,6 @@ package br.gov.cesarschool.poo.fidelidade.cliente.negocio;
 
 import br.gov.cesarschool.poo.fidelidade.cliente.dao.ClienteDAO;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
-import br.gov.cesarschool.poo.fidelidade.geral.dao.ClienteMediator;
 import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 import br.gov.cesarschool.poo.fidelidade.util.*;
@@ -128,7 +127,7 @@ public class ClienteMediator {
 		dao.incluir(WalterPai);
 		
 		ClienteMediator mediator = new ClienteMediator();
-		mediator.repositorioCliente.daoEncapsulado = dao;
+		//mediator.repositorioCliente.daoEncapsulado = dao;
 		mediator.consultarClientesOrdenadosPorNome();
 		
 	}

@@ -1,16 +1,21 @@
 package br.gov.cesarschool.poo.fidelidade.cartao.negocio;
 
-import br.gov.cesarschool.poo.fidelidade.cartao.entidade.CartaoFidelidade;
-import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoPontuacao;
-import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoResgate;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import br.gov.cesarschool.poo.fidelidade.cartao.dao.CartaoFidelidadeDAO;
 import br.gov.cesarschool.poo.fidelidade.cartao.dao.LancamentoExtratoDAO;
+import br.gov.cesarschool.poo.fidelidade.cartao.entidade.CartaoFidelidade;
+import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtrato;
+import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoPontuacao;
+import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoResgate;
+import br.gov.cesarschool.poo.fidelidade.cartao.entidade.RetornoConsultaExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.TipoResgate;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
+import br.gov.cesarschool.poo.fidelidade.util.Ordenador;
+import br.gov.cesarschool.poo.fidelidade.util.StringUtil;
 import br.gov.cesarschool.poo.fidelidade.util.ValidadorCPF;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.time.LocalDateTime;
 
 public class CartaoFidelidadeMediator {
 
@@ -101,5 +106,55 @@ public class CartaoFidelidadeMediator {
 	public CartaoFidelidade buscarCartao(long numeroCartao) {
 	    CartaoFidelidade cartao = repositorioCartao.buscar((numeroCartao+""));
 	    return cartao;
+	}
+	
+	public RetornoConsultaExtrato consultaEntreDatas(String numeroCartao, LocalDateTime inicio, LocalDateTime fim) {
+		
+		if(StringUtil.ehNuloOuBranco(numeroCartao)) {
+			return new RetornoConsultaExtrato(null, "Número do cartão inválido! (nulo ou branco)");
+		}
+		
+		if(inicio == null) {
+			return new RetornoConsultaExtrato(null, "Data de início inválida! (NULL)");
+		}
+		
+		if(fim != null && fim.isAfter(inicio)) {
+			return new RetornoConsultaExtrato(null, "Data final inválida! (Menor ou igual à data de início))");
+		}
+		
+		LancamentoExtrato[] lancamentosGeral = repositorioLancamento.buscarTodos();
+		
+		LancamentoExtrato[] lancamentosFiltrados = new LancamentoExtrato[lancamentosGeral.length];
+		int lancamentosFiltradosCounter = 0;
+		
+		for(LancamentoExtrato lancamento:lancamentosGeral) {
+			String numCard = lancamento.getNumeroCartao() + "";
+			
+			if(numCard == numeroCartao) {
+				
+				if(fim == null && (lancamento.getDataHoraLancamento().isAfter(inicio) ||  lancamento.getDataHoraLancamento().isEqual(inicio))) {
+					
+					lancamentosFiltrados[lancamentosFiltradosCounter] = lancamento;
+					lancamentosFiltradosCounter++;
+					
+				}else if(fim != null && (lancamento.getDataHoraLancamento().isAfter(inicio) ||  lancamento.getDataHoraLancamento().isEqual(inicio))) {
+					
+					if((lancamento.getDataHoraLancamento().isBefore(fim) ||  lancamento.getDataHoraLancamento().isEqual(fim))) {
+						
+						lancamentosFiltrados[lancamentosFiltradosCounter] = lancamento;
+						lancamentosFiltradosCounter++;
+						
+					}			
+				}
+				
+			}
+		}
+		
+		Ordenador ordenator = new Ordenador();
+		
+		ordenator.ordenar(lancamentosFiltrados);
+		
+		return new RetornoConsultaExtrato(lancamentosFiltrados, null);
+		
 	}
 }
