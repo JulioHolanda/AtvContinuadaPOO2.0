@@ -2,6 +2,9 @@ package br.gov.cesarschool.poo.fidelidade.cliente.negocio;
 
 import br.gov.cesarschool.poo.fidelidade.cliente.dao.ClienteDAO;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
+import br.gov.cesarschool.poo.fidelidade.geral.dao.ClienteMediator;
+import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 import br.gov.cesarschool.poo.fidelidade.util.*;
 import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
 
@@ -99,15 +102,34 @@ public class ClienteMediator {
 	    return cliente;
 	}
 	
+	//@SuppressWarnings("static-access")
 	public Cliente[] consultarClientesOrdenadosPorNome() {
-		
 		Cliente[] clientes = repositorioCliente.buscarTodos();
 		
 		Ordenador ordenator = new Ordenador();
-		
 		ordenator.ordenar(clientes);
-		
+		for(Cliente cliente:clientes) {
+			System.out.println("Cliente: " + cliente.getNomeCompleto());
+		}
 		return clientes;
+		
+	}
+	
+	public static void main(String[] args) {
+		
+		String diretorioBase = "Walter-chan/";
+		
+		DAOGenerico dao = new DAOGenerico(diretorioBase);
+		
+		Cliente WalterPai = new Cliente("88110065411");
+		
+		WalterPai.setNomeCompleto("Ze Holanda Menezes de Barret");
+		
+		dao.incluir(WalterPai);
+		
+		ClienteMediator mediator = new ClienteMediator();
+		mediator.repositorioCliente.daoEncapsulado = dao;
+		mediator.consultarClientesOrdenadosPorNome();
 		
 	}
 	

@@ -127,9 +127,8 @@ public class DAOGenerico {
 						
 				cont += 1;
 			}
-			System.out.println(ident);
-			
-			return ident;
+			Identificavel[] identRet = ident;
+			return  identRet;
 
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao ler chave" + e.getMessage());
@@ -167,13 +166,7 @@ public class DAOGenerico {
 			}
 		}
 		
-		//System.out.println("Local dos arquivos:" + dao.getArquivo(WalterPai).getAbsolutePath());
-		
-		File diretorio = dao.getArquivo(WalterPai);
-		
-		//System.out.println(diretorio.getAbsolutePath());
-		
-		File[] arquivos = diretorio.listFiles();
+		//ClienteMediator mediator = new ClienteMediator();
 		
 		
 	}

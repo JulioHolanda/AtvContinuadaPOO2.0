@@ -32,10 +32,8 @@ public class ClienteDAO {
 	}
 	
 	public Cliente[] buscarTodos() {
-		
 		Identificavel[] identificaveis = daoEncapsulado.buscarTodos();
-		
-		if(identificaveis.length == 0) {
+		if(identificaveis == null) {
 			return new Cliente[0];
 		}
 		
@@ -57,7 +55,6 @@ public class ClienteDAO {
 		if(contClientes == 0) {
 			return new Cliente[0];
 		}
-		
 		return clientes;
 		
 	}
