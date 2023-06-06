@@ -1,7 +1,9 @@
 package br.gov.cesarschool.poo.fidelidade.cartao.negocio;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import br.gov.cesarschool.poo.fidelidade.cartao.dao.CartaoFidelidadeDAO;
@@ -13,6 +15,7 @@ import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoResgat
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.RetornoConsultaExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.TipoResgate;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
+import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 import br.gov.cesarschool.poo.fidelidade.util.Ordenador;
 import br.gov.cesarschool.poo.fidelidade.util.StringUtil;
 import br.gov.cesarschool.poo.fidelidade.util.ValidadorCPF;
@@ -118,7 +121,7 @@ public class CartaoFidelidadeMediator {
 			return new RetornoConsultaExtrato(null, "Data de início inválida! (NULL)");
 		}
 		
-		if(fim != null && fim.isAfter(inicio)) {
+		if(fim != null && fim.isBefore(inicio)) {
 			return new RetornoConsultaExtrato(null, "Data final inválida! (Menor ou igual à data de início))");
 		}
 		
@@ -157,4 +160,16 @@ public class CartaoFidelidadeMediator {
 		return new RetornoConsultaExtrato(lancamentosFiltrados, null);
 		
 	}
+	
+	/*public static void main(String[] args) {
+		
+		String diretorioBase = "Walter-chan/";
+		
+		DAOGenerico dao = new DAOGenerico(diretorioBase);
+		
+		LancamentoExtratoPontuacao lancamento = new LancamentoExtratoPontuacao(22, 22, LocalDateTime.now());
+		
+		dao.incluir(lancamento);
+		
+	}*/
 }

@@ -10,7 +10,7 @@ import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 
 public class DAOGenerico {
 	private static final String EXT = ".dat";
-	private String diretorioBase;
+	public String diretorioBase;
 
 	public DAOGenerico(String diretorioBase) {
 		this.diretorioBase = diretorioBase;

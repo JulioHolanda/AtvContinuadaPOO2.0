@@ -1,16 +1,20 @@
 package br.gov.cesarschool.poo.fidelidade.cliente.negocio;
-
+import java.util.Date;
+import java.util.Calendar;
 import br.gov.cesarschool.poo.fidelidade.cliente.dao.ClienteDAO;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
 import br.gov.cesarschool.poo.fidelidade.util.*;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
+
 import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
 
 public class ClienteMediator {
 	
 	private static ClienteMediator instance;
-	private ClienteDAO repositorioCliente;
+	public ClienteDAO repositorioCliente;
 	private CartaoFidelidadeMediator cartaoMediator;
 	
 	private ClienteMediator() {
@@ -107,9 +111,6 @@ public class ClienteMediator {
 		
 		Ordenador ordenator = new Ordenador();
 		ordenator.ordenar(clientes);
-		for(Cliente cliente:clientes) {
-			System.out.println("Cliente: " + cliente.getNomeCompleto());
-		}
 		return clientes;
 		
 	}
@@ -120,15 +121,21 @@ public class ClienteMediator {
 		
 		DAOGenerico dao = new DAOGenerico(diretorioBase);
 		
-		Cliente WalterPai = new Cliente("88110065411");
+		Cliente WalterPai = new Cliente("53295239");
 		
-		WalterPai.setNomeCompleto("Ze Holanda Menezes de Barret");
+		Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(new Date());
+
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+
+        Date ontem = calendar.getTime();
+		WalterPai.setDataNascimento(ontem);
+		WalterPai.setRenda(1000);
 		
-		dao.incluir(WalterPai);
+		WalterPai.setNomeCompleto("Roberto Barret");
 		
-		ClienteMediator mediator = new ClienteMediator();
-		//mediator.repositorioCliente.daoEncapsulado = dao;
-		mediator.consultarClientesOrdenadosPorNome();
+		dao.alterar(WalterPai);
 		
 	}
 	

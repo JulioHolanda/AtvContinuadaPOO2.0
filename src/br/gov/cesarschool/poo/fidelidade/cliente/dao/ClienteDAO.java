@@ -13,7 +13,7 @@ public class ClienteDAO {
 	private static final String FILE_SEP = System.getProperty("file.separator");
 	private static final String DIR_BASE = "." + FILE_SEP + "fidelidade" + FILE_SEP + "cliente" + FILE_SEP;
 
-	DAOGenerico daoEncapsulado;
+	public DAOGenerico daoEncapsulado;
 
 	public ClienteDAO() {
 		daoEncapsulado = new DAOGenerico(DIR_BASE);
