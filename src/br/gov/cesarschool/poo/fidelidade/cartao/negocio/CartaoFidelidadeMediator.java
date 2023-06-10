@@ -16,6 +16,7 @@ import br.gov.cesarschool.poo.fidelidade.cartao.entidade.RetornoConsultaExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.TipoResgate;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
+import br.gov.cesarschool.poo.fidelidade.util.ExcecaoDadoInvalido;
 import br.gov.cesarschool.poo.fidelidade.util.Ordenador;
 import br.gov.cesarschool.poo.fidelidade.util.StringUtil;
 import br.gov.cesarschool.poo.fidelidade.util.ValidadorCPF;
@@ -111,18 +112,18 @@ public class CartaoFidelidadeMediator {
 	    return cartao;
 	}
 	
-	public RetornoConsultaExtrato consultaEntreDatas(String numeroCartao, LocalDateTime inicio, LocalDateTime fim) {
+	public LancamentoExtrato[] consultaEntreDatas(String numeroCartao, LocalDateTime inicio, LocalDateTime fim) throws ExcecaoDadoInvalido{
 		
 		if(StringUtil.ehNuloOuBranco(numeroCartao)) {
-			return new RetornoConsultaExtrato(null, "Número do cartão inválido! (nulo ou branco)");
+			throw new ExcecaoDadoInvalido("Número do cartão inválido! (nulo ou branco)");
 		}
 		
 		if(inicio == null) {
-			return new RetornoConsultaExtrato(null, "Data de início inválida! (NULL)");
+			throw new ExcecaoDadoInvalido("Data de início inválida! (NULL)");
 		}
 		
 		if(fim != null && fim.isBefore(inicio)) {
-			return new RetornoConsultaExtrato(null, "Data final inválida! (Menor ou igual à data de início))");
+			throw new ExcecaoDadoInvalido("Data final inválida! (Menor ou igual à data de início)");
 		}
 		
 		LancamentoExtrato[] lancamentosGeral = repositorioLancamento.buscarTodos();
@@ -157,8 +158,8 @@ public class CartaoFidelidadeMediator {
 		
 		ordenator.ordenar(lancamentosFiltrados);
 		
-		return new RetornoConsultaExtrato(lancamentosFiltrados, null);
-		
+		//return new RetornoConsultaExtrato(lancamentosFiltrados, null);
+		return lancamentosFiltrados;
 	}
 	
 	/*

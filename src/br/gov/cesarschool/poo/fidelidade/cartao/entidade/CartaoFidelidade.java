@@ -3,7 +3,9 @@ import java.io.Serializable;
 import java.util.*;
 
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
+import lombok.ToString;
 
+@ToString(callSuper = true, exclude = "dataNascimento")
 public class CartaoFidelidade extends Identificavel {
 	
 	private long numero;

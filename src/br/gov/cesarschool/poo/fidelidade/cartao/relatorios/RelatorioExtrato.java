@@ -9,16 +9,19 @@ import br.gov.cesarschool.poo.fidelidade.cartao.entidade.CartaoFidelidade;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.RetornoConsultaExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
+import br.gov.cesarschool.poo.fidelidade.util.ExcecaoDadoInvalido;
 import br.gov.cesarschool.poo.fidelidade.util.Ordenador;
 
 public class RelatorioExtrato {
 	private static final Scanner ENTRADA = new Scanner(System.in);
 	
-	public static void gerarRelatorioExtratos(String numeroCartao, LocalDateTime inicio, LocalDateTime fim) {
+	public static void gerarRelatorioExtratos(String numeroCartao, LocalDateTime inicio, LocalDateTime fim) throws ExcecaoDadoInvalido {
 		CartaoFidelidadeMediator mediator = CartaoFidelidadeMediator.getInstance();
-		RetornoConsultaExtrato retorno = mediator.consultaEntreDatas(numeroCartao, inicio, fim);
-		if(retorno != null && retorno.getLancamentos() != null) {
-			LancamentoExtrato[] lancamentos = retorno.getLancamentos();
+		
+		//RetornoConsultaExtrato retorno = mediator.consultaEntreDatas(numeroCartao, inicio, fim);
+		//if(retorno != null && retorno.getLancamentos() != null) {
+			//LancamentoExtrato[] lancamentos = retorno.getLancamentos();
+			LancamentoExtrato[] lancamentos = mediator.consultaEntreDatas(numeroCartao, inicio, fim);
 			Ordenador ordenator = new Ordenador();
 			ordenator.ordenar(lancamentos);
 			for(LancamentoExtrato lancamento:lancamentos) {
@@ -30,7 +33,7 @@ public class RelatorioExtrato {
 		        
 				System.out.println("Data de Lançamento: " + dataLancamento + "\nValor: " + lancamento.getquantidadePontos() + "\nTipo: " + lancamento.getIdentificadorTipo());
 			}
-		}
+		//}
 	}
 	public static void main(String[] args) {
 		long numeroCartao = ENTRADA.nextLong();
@@ -49,7 +52,10 @@ public class RelatorioExtrato {
 		LocalDateTime dataTimeInicio = LocalDateTime.of(anoInicio, mesInicioFormatado, diaInicio, horaInicio, 0);
 		LocalDateTime dataTimeFim = LocalDateTime.of(anoFim, mesFimFormatado, diaFim, horaFim, 0);
 		
-		gerarRelatorioExtratos(numeroCartao+"", dataTimeInicio, dataTimeFim);
-		
+		try {
+			gerarRelatorioExtratos(numeroCartao+"", dataTimeInicio, dataTimeFim);
+		}catch (ExcecaoDadoInvalido e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

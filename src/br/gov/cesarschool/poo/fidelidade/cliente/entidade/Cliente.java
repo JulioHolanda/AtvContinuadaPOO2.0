@@ -7,7 +7,9 @@ import br.gov.cesarschool.poo.fidelidade.geral.entidade.Sexo;
 import java.util.Date;
 import java.io.Serializable;
 import java.util.Calendar;
+import lombok.*;
 
+@ToString(callSuper = true, exclude = "dataNascimento")
 public class Cliente extends Identificavel implements Comparavel {
 	private String cpf;
 	private	String nomeCompleto;
