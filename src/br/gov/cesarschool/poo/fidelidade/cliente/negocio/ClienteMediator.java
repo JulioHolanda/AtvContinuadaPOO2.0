@@ -1,10 +1,12 @@
 package br.gov.cesarschool.poo.fidelidade.cliente.negocio;
 import java.util.Date;
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Sexo;
 import java.util.Calendar;
 import br.gov.cesarschool.poo.fidelidade.cliente.dao.ClienteDAO;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
+import br.gov.cesarschool.poo.fidelidade.geral.entidade.Sexo;
 import br.gov.cesarschool.poo.fidelidade.util.*;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
@@ -114,29 +116,34 @@ public class ClienteMediator {
 		return clientes;
 		
 	}
-	
+	/*
 	public static void main(String[] args) {
 		
 		String diretorioBase = "Walter-chan/";
 		
-		DAOGenerico dao = new DAOGenerico(diretorioBase);
+		ClienteDAO dao = new ClienteDAO();
 		
-		Cliente WalterPai = new Cliente("53295239");
+		Cliente WalterPai = new Cliente("10084039469");
 		
 		Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(new Date());
 
-        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        calendar.add(Calendar.DAY_OF_YEAR, -(365*50));
 
         Date ontem = calendar.getTime();
 		WalterPai.setDataNascimento(ontem);
 		WalterPai.setRenda(1000);
-		
+		WalterPai.setSexo(Sexo.MASCULINO);
+		WalterPai.setEndereco();
+
 		WalterPai.setNomeCompleto("Roberto Barret");
 		
-		dao.alterar(WalterPai);
+		ClienteMediator cMediator = ClienteMediator.getInstance();
+		ResultadoInclusaoCliente res = cMediator.incluir(WalterPai);
+		System.out.println(res.getMensagemErroValidacao() );
 		
 	}
+	 * */
 	
 }

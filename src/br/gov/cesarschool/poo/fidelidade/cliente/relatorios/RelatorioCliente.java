@@ -23,8 +23,6 @@ public class RelatorioCliente {
 	
 	public static void main(String[] args) {
 		ClienteMediator mediator = ClienteMediator.getInstance();
-		String diretorio = "Walter-chan";
-		mediator.repositorioCliente.daoEncapsulado.diretorioBase = diretorio;
 		gerarRelatorioClientes(mediator);	
 		
 	}

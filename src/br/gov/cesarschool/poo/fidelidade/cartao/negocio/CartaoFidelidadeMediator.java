@@ -161,15 +161,17 @@ public class CartaoFidelidadeMediator {
 		
 	}
 	
-	/*public static void main(String[] args) {
+	/*
+		public static void main(String[] args) {
 		
-		String diretorioBase = "Walter-chan/";
+
 		
-		DAOGenerico dao = new DAOGenerico(diretorioBase);
+		LancamentoExtratoDAO dao = new LancamentoExtratoDAO();
 		
 		LancamentoExtratoPontuacao lancamento = new LancamentoExtratoPontuacao(22, 22, LocalDateTime.now());
 		
 		dao.incluir(lancamento);
 		
-	}*/
+		}
+	 */
 }
