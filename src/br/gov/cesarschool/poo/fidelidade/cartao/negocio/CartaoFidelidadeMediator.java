@@ -15,8 +15,8 @@ import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtratoResgat
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.RetornoConsultaExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.TipoResgate;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
+import br.gov.cesarschool.poo.fidelidade.excecoes.ExcecaoDadoInvalido;
 import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
-import br.gov.cesarschool.poo.fidelidade.util.ExcecaoDadoInvalido;
 import br.gov.cesarschool.poo.fidelidade.util.Ordenador;
 import br.gov.cesarschool.poo.fidelidade.util.StringUtil;
 import br.gov.cesarschool.poo.fidelidade.util.ValidadorCPF;

@@ -4,18 +4,20 @@ import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.CartaoFidelidade;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.LancamentoExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.entidade.RetornoConsultaExtrato;
 import br.gov.cesarschool.poo.fidelidade.cartao.negocio.CartaoFidelidadeMediator;
-import br.gov.cesarschool.poo.fidelidade.util.ExcecaoDadoInvalido;
+import br.gov.cesarschool.poo.fidelidade.excecoes.ExcecaoDadoInvalido;
 import br.gov.cesarschool.poo.fidelidade.util.Ordenador;
 
 public class RelatorioExtrato {
 	private static final Scanner ENTRADA = new Scanner(System.in);
 	
-	public static void gerarRelatorioExtratos(String numeroCartao, LocalDateTime inicio, LocalDateTime fim) throws ExcecaoDadoInvalido {
+	public static void gerarRelatorioExtratos(Long numeroCartaoLong, LocalDateTime inicio, LocalDateTime fim) throws ExcecaoDadoInvalido {
+		String numeroCartao = numeroCartaoLong+"";
 		CartaoFidelidadeMediator mediator = CartaoFidelidadeMediator.getInstance();
 		
 		//RetornoConsultaExtrato retorno = mediator.consultaEntreDatas(numeroCartao, inicio, fim);
@@ -36,24 +38,21 @@ public class RelatorioExtrato {
 		//}
 	}
 	public static void main(String[] args) {
+		
 		long numeroCartao = ENTRADA.nextLong();
-		int diaInicio = ENTRADA.nextInt();
-		int mesInicio = ENTRADA.nextInt();
-		int anoInicio = ENTRADA.nextInt();
-		int horaInicio = ENTRADA.nextInt();
-		int diaFim = ENTRADA.nextInt();
-		int mesFim = ENTRADA.nextInt();
-		int anoFim = ENTRADA.nextInt();
-		int horaFim = ENTRADA.nextInt();
 		
-		Month mesInicioFormatado = Month.of(mesInicio);
-		Month mesFimFormatado = Month.of(mesFim);
+		String dataInicio = ENTRADA.nextLine();
+		LocalDateTime dateTimeInicio = LocalDateTime.parse(dataInicio, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 		
-		LocalDateTime dataTimeInicio = LocalDateTime.of(anoInicio, mesInicioFormatado, diaInicio, horaInicio, 0);
-		LocalDateTime dataTimeFim = LocalDateTime.of(anoFim, mesFimFormatado, diaFim, horaFim, 0);
+		String dataFim = ENTRADA.nextLine();
+		LocalDateTime dateTimeFim = LocalDateTime.parse(dataFim, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+		
+		System.out.println(dateTimeInicio+"");
+		System.out.println(dateTimeFim+"");
 		
 		try {
-			gerarRelatorioExtratos(numeroCartao+"", dataTimeInicio, dataTimeFim);
+			gerarRelatorioExtratos(numeroCartao, dateTimeInicio, dateTimeFim);
 		}catch (ExcecaoDadoInvalido e) {
 			System.out.println(e.getMessage());
 		}
