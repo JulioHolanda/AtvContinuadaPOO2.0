@@ -8,7 +8,8 @@ import br.gov.cesarschool.poo.fidelidade.cliente.negocio.ClienteMediator;
 
 public class RelatorioCliente {
 	
-	public static void gerarRelatorioClientes(ClienteMediator mediator) {
+	public static void gerarRelatorioClientes() {
+		ClienteMediator mediator = ClienteMediator.getInstance();
 		Cliente[] clientes = mediator.consultarClientesOrdenadosPorNome();
 		for(Cliente cliente:clientes) {
 			String dataNascimento = "";
@@ -22,8 +23,8 @@ public class RelatorioCliente {
 	}
 	
 	public static void main(String[] args) {
-		ClienteMediator mediator = ClienteMediator.getInstance();
-		gerarRelatorioClientes(mediator);	
+		
+		gerarRelatorioClientes();	
 		
 	}
 
