@@ -12,10 +12,10 @@ import br.gov.cesarschool.poo.fidelidade.geral.dao.DAOGenerico;
 public class CartaoFidelidadeDAO {
     private static final String FILE_SEP = System.getProperty("file.separator");
     private static final String DIR_BASE = "." + FILE_SEP + "fidelidade" + FILE_SEP + "cartao" + FILE_SEP;
-    DAOGenerico daoEncapsulado;
+    private DAOGenerico<CartaoFidelidade> daoEncapsulado;
 
     public CartaoFidelidadeDAO() {
-    	daoEncapsulado = new DAOGenerico(DIR_BASE);
+    	daoEncapsulado = new DAOGenerico<>(DIR_BASE);
     }
 
     public boolean incluir(CartaoFidelidade cartao) {
@@ -27,6 +27,6 @@ public class CartaoFidelidadeDAO {
     }
 
     public CartaoFidelidade buscar(String numero) {
-    	return (CartaoFidelidade)daoEncapsulado.buscar(numero);
+    	return daoEncapsulado.buscar(numero);
     }
 }

@@ -17,10 +17,10 @@ public class LancamentoExtratoDAO {
 	
 	private static final String FILE_SEP = System.getProperty("file.separator");
 	private static final String DIR_BASE = "." + FILE_SEP + "fidelidade" + FILE_SEP + "lancamento" + FILE_SEP;
-    DAOGenerico daoEncapsulado;
+    private DAOGenerico<LancamentoExtrato> daoEncapsulado;
 	
 	public LancamentoExtratoDAO() {
-    	daoEncapsulado = new DAOGenerico(DIR_BASE);
+    	daoEncapsulado = new DAOGenerico<>(DIR_BASE);
 	}
 	
 	public boolean incluir(LancamentoExtrato lancamentoExtrato) {
@@ -28,34 +28,8 @@ public class LancamentoExtratoDAO {
 	}
 	
 	public LancamentoExtrato[] buscarTodos() {
-		
-		Identificavel[] identificaveis = daoEncapsulado.buscarTodos();
-		
-		if(identificaveis.length == 0) {
-			return new LancamentoExtrato[0];
-		}
-		
-		LancamentoExtrato[] lancamentos = new LancamentoExtrato[identificaveis.length];
-		
-		int contLancamentos = 0;
-		
-		for(Identificavel ident:identificaveis) {
-			
-			Object objeto = (Object) ident;
-			
-			if(objeto instanceof LancamentoExtrato) {
-				lancamentos[contLancamentos] = (LancamentoExtrato) ident;
-				
-				contLancamentos++;
-			}
-		}
-		
-		if(contLancamentos == 0) {
-			return new LancamentoExtrato[0];
-		}
-		
-		return lancamentos;
-		
+		LancamentoExtrato[] lancamentos = daoEncapsulado.buscarTodos();
+		return lancamentos;		
 	}
 
 }

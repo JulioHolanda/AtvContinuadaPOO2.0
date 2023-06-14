@@ -13,10 +13,10 @@ public class ClienteDAO {
 	private static final String FILE_SEP = System.getProperty("file.separator");
 	private static final String DIR_BASE = "." + FILE_SEP + "fidelidade" + FILE_SEP + "cliente" + FILE_SEP;
 
-	public DAOGenerico daoEncapsulado;
+	private DAOGenerico<Cliente> daoEncapsulado;
 
 	public ClienteDAO() {
-		daoEncapsulado = new DAOGenerico(DIR_BASE);
+		daoEncapsulado = new DAOGenerico<>(DIR_BASE);
 	}
 
 	public boolean incluir(Cliente cliente) {
@@ -28,33 +28,11 @@ public class ClienteDAO {
 	}
 
 	public Cliente buscar(String cpf) {
-		return (Cliente)daoEncapsulado.buscar(cpf);
+		return daoEncapsulado.buscar(cpf);
 	}
 	
 	public Cliente[] buscarTodos() {
-		Identificavel[] identificaveis = daoEncapsulado.buscarTodos();
-		if(identificaveis == null) {
-			return new Cliente[0];
-		}
-		
-		Cliente[] clientes = new Cliente[identificaveis.length];
-		
-		int contClientes = 0;
-		
-		for(Identificavel ident:identificaveis) {
-			
-			Object objeto = (Object) ident;
-			
-			if(objeto instanceof Cliente) {
-				clientes[contClientes] = (Cliente) ident;
-				
-				contClientes++;
-			}
-		}
-		
-		if(contClientes == 0) {
-			return new Cliente[0];
-		}
+		Cliente[] clientes = daoEncapsulado.buscarTodos();
 		return clientes;
 		
 	}

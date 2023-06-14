@@ -7,8 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import br.gov.cesarschool.poo.fidelidade.cliente.entidade.Cliente;
 import br.gov.cesarschool.poo.fidelidade.geral.entidade.Identificavel;
-
-public class DAOGenerico {
+ //<T extends Identificavel>
+public class DAOGenerico <T extends Identificavel>{
 	private static final String EXT = ".dat";
 	public String diretorioBase;
 
@@ -26,11 +26,11 @@ public class DAOGenerico {
 		return new File(nomeArq);
 	}
 	
-	private File getArquivo(Identificavel ident) {
+	private File getArquivo(T ident) {
 		 return getArquivo(ident.obterChave());
 	}
 
-	private void incluirAux(Identificavel ident, File arq) {
+	private void incluirAux(T ident, File arq) {
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		try {
@@ -51,7 +51,7 @@ public class DAOGenerico {
 		}
 	}
 
-	public boolean incluir(Identificavel ident) {
+	public boolean incluir(T ident) {
 		File arq = getArquivo(ident);
 		if (arq.exists()) {
 			return false;
@@ -60,7 +60,7 @@ public class DAOGenerico {
 		return true;
 	}
 
-	public boolean alterar(Identificavel ident) {
+	public boolean alterar(T ident) {
 		File arq = getArquivo(ident);
 		if (!arq.exists()) {
 			return false;
@@ -72,7 +72,8 @@ public class DAOGenerico {
 		return true;
 	}
 
-	public Identificavel buscar(String chave) {
+	@SuppressWarnings("unchecked")
+	public T buscar(String chave) {
 		File arq = getArquivo(chave);
 		if (!arq.exists()) {
 			return null;
@@ -82,7 +83,7 @@ public class DAOGenerico {
 		try {
 			fis = new FileInputStream(arq);
 			ois = new ObjectInputStream(fis);
-			return (Identificavel) ois.readObject();
+			return (T) ois.readObject();
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao ler chave");
 		} finally {
@@ -97,8 +98,8 @@ public class DAOGenerico {
 		}
 	}
 	
-	public Identificavel[] buscarTodos() {
-
+	public T[] buscarTodos() {
+		T[] arrayVazio = null;
 		
 		File diretorio = new File(diretorioBase);
 		
@@ -112,7 +113,7 @@ public class DAOGenerico {
 			File[] files = diretorio.listFiles((dir, name) -> name.toLowerCase().endsWith(".dat"));
 			
 			if(files.length == 0) {
-				return new Identificavel[0];
+				return arrayVazio;
 			}
 			
 			Identificavel[] ident = new Identificavel[files.length];
@@ -123,11 +124,11 @@ public class DAOGenerico {
 				fis = new FileInputStream(file);
 				ois = new ObjectInputStream(fis);
 				
-				ident[cont] = (Identificavel) ois.readObject();
+				ident[cont] = (T) ois.readObject();
 						
 				cont += 1;
 			}
-			Identificavel[] identRet = ident;
+			T[] identRet = (T[]) ident;
 			return  identRet;
 
 		} catch (Exception e) {
@@ -143,34 +144,5 @@ public class DAOGenerico {
 			}
 		}
 	}
-	
-	public static void main(String[] args) {
-		
-		String diretorioBase = "Walter-chan/";
-		
-		DAOGenerico dao = new DAOGenerico(diretorioBase);
-		
-		Cliente WalterPai = new Cliente("11147106444");
-		
-		WalterPai.setNomeCompleto("Walter Pai Andre");
-		
-		dao.incluir(WalterPai);
-		
-		Identificavel[] aidento = dao.buscarTodos();
-		
-		for(Identificavel aids:aidento) {			
-			Object objeto = (Object) aids;
-			
-			if(objeto instanceof Cliente) {
-				System.out.println(objeto);				
-			}
-		}
-		
-		//ClienteMediator mediator = new ClienteMediator();
-		
-		
-	}
-	
-	
-	
+
 }
